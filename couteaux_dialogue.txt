@@ -10,8 +10,6 @@ D'abord une page d'accueil vidéo, puis des pages qui montrent qui met en valeur
 
 Parfait. Pour la landing page, souhaitez-vous que la vidéo soit présentée de manière particulière? Par exemple, en arrière-plan, en grand format, ou d'une autre manière?
 
-Aimeriez-vous que la vidéo soit présentée de manière particulière sur la page d'accueil ?
-
 Bien le plus simple, je pense que ce serait effectivement en arrière-plan.
 
 D'accord, une vidéo en arrière-plan pour la page d'accueil. Et pour les pages des couteaux, souhaitez-vous une description texte à côté des images, ou une autre présentation ?
@@ -30,15 +28,15 @@ Non, pas du tout, je ne m'y connais pas.
 
 Pas de problème. Il existe différentes solutions. Souhaitez-vous un système de paiement simple ou quelque chose de plus complexe avec gestion des stocks, par exemple ?
 
-Oh non, quelque chose de vraiment simple, ce n'est pas un site professionnel. C'est un amateur qui fait ses couteaux comme un loisir.
+Oh non, quelque chose de vraiment simple, mais plutôt professionnel. C'est un amateur qui fait de beaux couteaux, comme un loisir, et qui les vend.
 
-Très bien. Donc, une landing page avec une vidéo en arrière-plan, une galerie d'images avec un diaporama pour chaque couteau et un système de paiement simple. Est-ce que c'est tout ce dont vous avez besoin pour le moment ?
+Très bien. Donc, une page d'accueil avec une vidéo en arrière-plan, une galerie d'images avec un diaporama pour chaque couteau et un système de paiement simple. Est-ce que c'est tout ce dont vous avez besoin pour le moment ?
 
-Euh je voudrais aussi mettre les coordonnées de cet artisan et puis quelques infos sur lui et sur son travail.
+Euh je voudrais aussi mettre les coordonnées de cet artisan et quelques infos sur lui et sur son travail.
 
 Absolument. Nous pouvons ajouter une section avec les coordonnées et quelques informations sur l'artisan et son travail. Cela rendra le site plus personnel. Avons-nous toutes les informations nécessaires maintenant ?
 
-Euh ben j'aimerais euh euh essayer de trouver un style un peu métal urbain avec un pas mal de caractère puisque ce sont des couteaux.
+Euh ben j'aimerais euh euh essayer de trouver un style un peu métal urbain avec pas mal de caractère puisque ce sont des couteaux.
 
 Je vois ! Donc un style "métal urbain" avec une ambiance marquée. C'est noté. Je pense que nous avons toutes les informations nécessaires pour générer le code du site. Êtes-vous prêt à ce que je commence la génération ?
 

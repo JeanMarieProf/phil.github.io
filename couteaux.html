@@ -182,7 +182,7 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
+        /* Hero Section avec Parallaxe */
         #hero {
             height: 100vh;
             position: relative;
@@ -193,6 +193,7 @@
             padding: 0;
             color: #fff;
             background: url('medias/suminagashi_quad.gif') center/cover no-repeat;
+            overflow: hidden;
         }
 
         #bg-video {
@@ -206,6 +207,7 @@
             z-index: -2;
             transform: translateX(-50%) translateY(-50%);
             object-fit: cover;
+            will-change: transform;
         }
 
         .hero-overlay {
@@ -220,6 +222,60 @@
 
         .hero-content {
             z-index: 1;
+            will-change: transform, opacity;
+        }
+
+        /* Effet parallaxe pour les sections */
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 100px);
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+            z-index: -1;
+        }
+
+        /* Animation d'apparition au scroll */
+        .fade-in-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animation de slide depuis la gauche/droite */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .hero-content h1 {
@@ -562,6 +618,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
             animation: fadeIn 0.3s ease;
         }
@@ -1324,22 +1381,22 @@
 
         <section id="process">
             <div class="container">
-                <h2>Processus de Fabrication</h2>
-                <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                <h2 class="fade-in-scroll">Processus de Fabrication</h2>
+                <p class="fade-in-scroll" style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
                     Chaque couteau est le résultat d'un processus artisanal minutieux, alliant techniques ancestrales et savoir-faire moderne.
                 </p>
                 <div class="process-grid">
-                    <div class="process-item">
-                        <img src="medias/trempé.gif" alt="Trempe de la lame">
+                    <div class="process-item slide-in-left">
+                        <img src="medias/suite.gif" alt="Trempe de la lame">
                         <h3>Trempe de la Lame</h3>
                         <p>La trempe est une étape cruciale qui confère à l'acier sa dureté et sa résistance. La lame est chauffée à haute température puis refroidie rapidement dans l'huile ou l'eau.</p>
                     </div>
-                    <div class="process-item">
+                    <div class="process-item fade-in-scroll">
                         <img src="medias/suminagashi.gif" alt="Motif Suminagashi">
                         <h3>Motif Suminagashi</h3>
                         <p>Technique japonaise ancestrale créant des motifs uniques sur l'acier. Chaque lame devient une œuvre d'art avec des ondulations caractéristiques.</p>
                     </div>
-                    <div class="process-item">
+                    <div class="process-item slide-in-right">
                         <video autoplay loop muted playsinline>
                             <source src="medias/mode_d_emploi.mp4" type="video/mp4">
                             Votre navigateur ne supporte pas la vidéo.
@@ -1353,12 +1410,12 @@
 
         <section id="materials">
             <div class="container">
-                <h2>Matériaux d'Exception</h2>
-                <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                <h2 class="fade-in-scroll">Matériaux d'Exception</h2>
+                <p class="fade-in-scroll" style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
                     Je sélectionne rigoureusement chaque matériau pour garantir qualité, durabilité et esthétique.
                 </p>
                 <div class="materials-grid">
-                    <div class="material-card">
+                    <div class="material-card slide-in-left">
                         <h3>Aciers pour Lames</h3>
                         <ul>
                             <li><strong>Acier Carbone XC75</strong> - Excellent tranchant, facile à affûter, patine naturelle</li>
@@ -1368,7 +1425,7 @@
                         </ul>
                         <p>Chaque acier est choisi en fonction de l'usage prévu du couteau et des préférences esthétiques.</p>
                     </div>
-                    <div class="material-card">
+                    <div class="material-card fade-in-scroll">
                         <h3>Bois Précieux</h3>
                         <ul>
                             <li><strong>Noyer Stabilisé</strong> - Robuste, résistant à l'humidité, grain élégant</li>
@@ -1378,7 +1435,7 @@
                         </ul>
                         <p>Les bois sont stabilisés pour garantir leur durabilité et résistance aux variations d'humidité.</p>
                     </div>
-                    <div class="material-card">
+                    <div class="material-card slide-in-right">
                         <h3>Matériaux Modernes</h3>
                         <ul>
                             <li><strong>Fibre de Carbone</strong> - Ultra-léger, résistant, aspect moderne</li>
@@ -1394,13 +1451,13 @@
 
         <section id="methods" class="media-section">
             <div class="container">
-                <h2>Méthodes et Savoir-Faire</h2>
+                <h2 class="fade-in-scroll">Méthodes et Savoir-Faire</h2>
                 <div class="media-grid">
-                    <figure class="media-card">
+                    <figure class="media-card slide-in-left">
                         <img src="medias/suite.gif" alt="Diaporama modèles">
                         <figcaption class="media-caption">Quelques créations</figcaption>
                     </figure>
-                    <figure class="media-card">
+                    <figure class="media-card slide-in-right">
                         <img src="medias/patron.JPG" alt="Patron">
                         <figcaption class="media-caption">Patron avant découpe</figcaption>
                     </figure>
@@ -1410,8 +1467,8 @@
 
         <section id="diaporama" class="media-section">
             <div class="container">
-                <h2>Diaporama</h2>
-                <div class="diaporama-wrapper">
+                <h2 class="fade-in-scroll">Diaporama</h2>
+                <div class="diaporama-wrapper fade-in-scroll">
                     <img src="medias/diaporama.gif" alt="Diaporama grand format">
                 </div>
             </div>
@@ -1420,9 +1477,9 @@
 
         <section id="objets" class="media-section">
             <div class="container">
-                <h2>Objets en Images</h2>
+                <h2 class="fade-in-scroll">Objets en Images</h2>
                 <div class="media-grid">
-                    <figure class="media-card">
+                    <figure class="media-card fade-in-scroll">
                         <img src="medias/suite.gif" alt="Sequence d'objets fabriques">
                         <figcaption class="media-caption">Sequence</figcaption>
                     </figure>
@@ -1432,12 +1489,12 @@
 
         <section id="about">
             <div class="container">
-                <h2>L'Homme derrière la Lame</h2>
+                <h2 class="fade-in-scroll">L'Homme derrière la Lame</h2>
                 <div class="about-content">
-                    <div class="about-image">
+                    <div class="about-image slide-in-left">
                         <img src="medias/etau_de_coutellerie.JPG" alt="Outil de l'artisan forgeron">
                     </div>
-                    <div class="about-text">
+                    <div class="about-text slide-in-right">
                         <img src="medias/phil.jpg" alt="Logo Phil" class="about-logo">
 
                         <h3>Passion, Feu et Acier</h3>
@@ -1451,8 +1508,8 @@
 
         <section id="instagram" class="instagram-section">
             <div class="container">
-                <h2>Suivez-moi sur Instagram</h2>
-                <p style="text-align: center; max-width: 700px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                <h2 class="fade-in-scroll">Suivez-moi sur Instagram</h2>
+                <p class="fade-in-scroll" style="text-align: center; max-width: 700px; margin: 0 auto 20px; color: var(--color-text-secondary);">
                     Découvrez mes dernières créations, le quotidien de l'atelier et les coulisses de la fabrication.
                 </p>
                 <div class="instagram-embed">
@@ -1727,6 +1784,75 @@
                     contactForm.reset();
                 }, 500);
             });
+
+            // --- Effet Parallaxe ---
+            let ticking = false;
+
+            function parallaxScroll() {
+                const scrolled = window.pageYOffset;
+
+                // Parallaxe sur le hero (arrière-plan et contenu)
+                const hero = document.getElementById('hero');
+                const heroContent = document.querySelector('.hero-content');
+                const bgVideo = document.getElementById('bg-video');
+
+                if (hero && scrolled < hero.offsetHeight) {
+                    // L'arrière-plan défile plus lentement (0.5x)
+                    if (bgVideo) {
+                        bgVideo.style.transform = `translateX(-50%) translateY(calc(-50% + ${scrolled * 0.5}px))`;
+                    }
+                    // Le contenu défile plus lentement et devient transparent
+                    if (heroContent) {
+                        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                        heroContent.style.opacity = 1 - (scrolled / hero.offsetHeight) * 1.5;
+                    }
+                }
+
+                // Parallaxe sur les éléments avec classe .parallax-bg
+                const parallaxBgs = document.querySelectorAll('.parallax-bg');
+                parallaxBgs.forEach(bg => {
+                    const section = bg.closest('section');
+                    if (section) {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.offsetHeight;
+                        const sectionScroll = scrolled - sectionTop + window.innerHeight;
+
+                        // Appliquer l'effet seulement si la section est visible
+                        if (scrolled + window.innerHeight > sectionTop && scrolled < sectionTop + sectionHeight) {
+                            const yPos = -(sectionScroll * 0.3);
+                            bg.style.transform = `translateY(${yPos}px)`;
+                        }
+                    }
+                });
+
+                // Animation d'apparition au scroll
+                const fadeElements = document.querySelectorAll('.fade-in-scroll, .slide-in-left, .slide-in-right');
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementBottom = element.getBoundingClientRect().bottom;
+
+                    // L'élément est visible dans le viewport
+                    if (elementTop < window.innerHeight * 0.85 && elementBottom > 0) {
+                        element.classList.add('visible');
+                    }
+                });
+
+                ticking = false;
+            }
+
+            // Optimisation avec requestAnimationFrame
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        parallaxScroll();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Appeler une fois au chargement
+            parallaxScroll();
         });
     </script>
 
