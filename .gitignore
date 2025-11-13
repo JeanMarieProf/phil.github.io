@@ -11,3 +11,11 @@ Thumbs.db
 *.bak
 *~
 
+# Autres projets (non liés au site couteaux)
+code_writer_02.html
+codewriter.html
+fsm.html
+index_fsm.html
+
+# Fichiers de travail
+couteaux_dialogue.txt
