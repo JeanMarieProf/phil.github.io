@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE Visuel + FSM</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f0f0f0
+        }
+
+        #ide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            -webkit-user-select: none;
+            user-select: none
+        }
+
+        #link-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none
+        }
+
+        .node-base {
+            position: absolute;
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .2);
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            box-sizing: border-box;
+            transition: box-shadow .1s;
+            will-change: transform
+        }
+
+        .node-base:hover {
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .4)
+        }
+
+        .node-html {
+            background: #A0C4FF
+        }
+
+        .node-css {
+            background: #BDE4A8
+        }
+
+        .node-js {
+            background: #FFC3A0
+        }
+
+        .node-fsm_root {
+            background: #6A0DAD;
+            color: #fff
+        }
+
+        .node-fsm_state {
+            background: #F7A8AA
+        }
+
+        .node-fsm_transition {
+            background: #93E9BE
+        }
+
+        .node-title {
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: .8em;
+            margin-bottom: 5px;
+            color: inherit
+        }
+
+        .node-title,
+        .node-bottom {
+            align-self: stretch;
+        }
+
+        .node-name-input,
+        .node-value-input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: .8em;
+            padding: 2px 4px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: inherit;
+            background: transparent;
+            outline: none;
+            text-align: center;
+        }
+
+        .node-name-input:focus,
+        .node-value-input:focus {
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            text-align: left;
+        }
+
+        .node-bottom {
+            margin-top: 4px;
+            min-height: 18px;
+            text-align: center;
+        }
+
+        .node-value-display {
+            display: inline-block;
+            min-height: 18px;
+        }
+
+
+        .port {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid #333;
+            cursor: pointer;
+            z-index: 10
+        }
+
+        .port-input {
+            background: #4CAF50;
+            left: -5px
+        }
+
+        .port-output {
+            background: #1E90FF;
+            right: -5px
+        }
+
+        .port-fsm_initial {
+            background: #FFA500
+        }
+
+        .port-fsm_transition_in {
+            background: #FF69B4
+        }
+
+        .port-fsm_transition_out {
+            background: #1E90FF
+        }
+
+
+        .port-highlight {
+            box-shadow: 0 0 0 5px rgba(255, 255, 0, 0.6);
+            transition: box-shadow 0.05s;
+        }
+
+        #compiler-ui {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px
+        }
+
+        /* Couleurs globales des ports */
+        .port-input {
+            background: #4CAF50;
+        }
+
+        .port-output {
+            background: #1E90FF;
+        }
+
+        #fsm-output {
+            width: 300px;
+            height: 200px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow: auto
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ide-container"><svg id="link-canvas"></svg></div>
+    <div id="compiler-ui"><button id="btn-compile">Compiler FSM</button>
+        <pre id="fsm-output"></pre>
+    </div>
+    <script>
+        class Link {
+            constructor(id, sourcePort, targetPort, svg, manager) {
+                this.id = id;
+                this.source = sourcePort;
+                this.target = targetPort;
+                this.manager = manager;
+                this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                this.svg.setAttribute('fill', 'none');
+                this.svg.setAttribute('stroke', '#333');
+                this.svg.setAttribute('stroke-width', '3');
+                this.svg.setAttribute('stroke-linecap', 'round');
+                this.svg.setAttribute('pointer-events', 'visibleStroke');
+                this.svg.dataset.linkId = id;
+                svg.appendChild(this.svg);
+                this.svg.addEventListener('click', e => {
+                    manager.removeLink(id);
+                    e.stopPropagation();
+                });
+                this.svg.addEventListener('mouseover', () => {
+                    this.svg.setAttribute('stroke', '#FF4D4D');
+                    this.svg.setAttribute('stroke-width', '4');
+                });
+                this.svg.addEventListener('mouseout', () => {
+                    this.svg.setAttribute('stroke', '#333');
+                    this.svg.setAttribute('stroke-width', '3');
+                });
+            }
+            updatePath(p1, p2) {
+                const dx = Math.abs(p1.x - p2.x) * .5;
+                const d = `M ${p1.x} ${p1.y} C ${p1.x+dx} ${p1.y}, ${p2.x-dx} ${p2.y}, ${p2.x} ${p2.y}`;
+                this.svg.setAttribute('d', d);
+            }
+            remove() {
+                this.svg.remove();
+            }
+        }
+        class NodeComponent {
+            constructor(id, x, y, container, manager, type = 'html', width = 150, height = 70, name = null) {
+                this.id = id;
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.type = type;
+                this.manager = manager;
+                this.name = (name && typeof name === 'string' && name.length ? name : (this.type ? (this.type.toUpperCase() + ' - ' + this.id) : String(this.id)));
+                this.value = '';
+                this.inputs = [];
+                this.outputs = [];
+                this.isDragging = false;
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
+                this.element = this.createEl();
+                this.updatePosition();
+                this.setupEvents();
+                container.appendChild(this.element);
+            }
+            createEl() {
+                const n = document.createElement('div');
+                n.id = `node_${this.id}`;
+                n.className = `node-base node-${this.type}`;
+                n.style.width = `${this.width}px`;
+                n.style.height = `${this.height}px`;
+                const t = document.createElement('div');
+                t.className = 'node-title';
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.className = 'node-name-input';
+                nameInput.value = this.name;
+                t.appendChild(nameInput);
+                n.appendChild(t);
+                nameInput.addEventListener('mousedown', e => {
+                    e.stopPropagation();
+                });
+                nameInput.addEventListener('input', e => {
+                    this.name = e.target.value;
+                    if (this.type === 'fsm_state') {
+                        if (this.data) this.data.stateName = this.name;
+                        else this.data = {
+                            stateName: this.name
+                        };
+                    } else if (this.type === 'fsm_transition') {
+                        if (this.data) this.data.eventName = this.name;
+                        else this.data = {
+                            eventName: this.name
+                        };
+                    }
+                });
+                nameInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') nameInput.blur();
+                });
+                const bottom = document.createElement('div');
+                bottom.className = 'node-bottom';
+                const valSpan = document.createElement('span');
+                valSpan.className = 'node-value-display';
+                valSpan.innerText = (this.value && this.value.length ? this.value : '');
+                bottom.appendChild(valSpan);
+                bottom.addEventListener('mousedown', e => {
+                    e.stopPropagation();
+                });
+                bottom.addEventListener('click', e => {
+                    this.showValueEditor();
+                });
+                n.appendChild(bottom);
+                this.addPort('input', 0, this.height / 2, 'GENERIC_IN', n);
+                this.addPort('output', this.width, this.height / 2, 'GENERIC_OUT', n);
+                return n;
+            }
+            showValueEditor() {
+                const bottom = this.element.querySelector('.node-bottom');
+                if (!bottom) return;
+                const existing = bottom.querySelector('input');
+                if (existing) return;
+                bottom.innerHTML = '';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'node-value-input';
+                input.value = (this.value && this.value.length ? this.value : '');
+                bottom.appendChild(input);
+                input.addEventListener('mousedown', function(e) {
+                    e.stopPropagation();
+                });
+                const commit = () => {
+                    this.value = input.value;
+                    bottom.innerHTML = '';
+                    const span = document.createElement('span');
+                    span.className = 'node-value-display';
+                    span.innerText = this.value;
+                    bottom.appendChild(span);
+                };
+                input.addEventListener('blur', commit);
+                input.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') input.blur();
+                    if (e.key === 'Escape') {
+                        input.value = (this.value && this.value.length ? this.value : '');
+                        input.blur();
+                    }
+                });
+                input.focus();
+                try {
+                    input.select();
+                } catch (err) {}
+            }
+
+            addPort(direction, x_rel, y_rel, s_type, root) {
+                const port = document.createElement('div');
+                port.className = `port port-${direction}`;
+                port.style.top = `${y_rel-5}px`;
+                direction === 'input' ? port.style.left = '-5px' : port.style.right = '-5px';
+                port.dataset.nodeId = this.id;
+                port.dataset.portType = direction;
+                root.appendChild(port);
+                const data = {
+                    element: port,
+                    type: direction,
+                    s_type,
+                    x_rel: direction === 'input' ? 0 : this.width,
+                    y_rel,
+                    id: `${this.id}_${direction}_${s_type}`
+                };
+                direction === 'input' ? this.inputs.push(data) : this.outputs.push(data);
+            }
+            updatePosition() {
+                this.element.style.transform = `translate(${this.x}px,${this.y}px)`;
+            }
+            setupEvents() {
+                this.boundMove = e => this.onMouseMove(e);
+                this.boundUp = e => this.onMouseUp(e);
+                this.element.addEventListener('mousedown', e => this.onMouseDown(e));
+            }
+            onMouseDown(e) {
+                if (e.target.classList.contains('port')) return;
+                if (e.target.tagName === 'INPUT') return;
+                if (e.target.closest && e.target.closest('.node-bottom')) return;
+                this.isDragging = true;
+                this.dragOffsetX = e.clientX - this.x;
+                this.dragOffsetY = e.clientY - this.y;
+                document.addEventListener('mousemove', this.boundMove);
+                document.addEventListener('mouseup', this.boundUp);
+            }
+            onMouseMove(e) {
+                if (!this.isDragging) return;
+                this.x = e.clientX - this.dragOffsetX;
+                this.y = e.clientY - this.dragOffsetY;
+                this.updatePosition();
+                this.manager.notifyNodeMoved(this.id);
+            }
+            onMouseUp() {
+                if (!this.isDragging) return;
+                this.isDragging = false;
+                document.removeEventListener('mousemove', this.boundMove);
+                document.removeEventListener('mouseup', this.boundUp);
+                this.manager.checkNewConnectionsByContact(this.id);
+            }
+            getPortWorldPosition(pd) {
+                const r = this.element.getBoundingClientRect();
+                return {
+                    x: r.left + pd.x_rel,
+                    y: r.top + pd.y_rel
+                };
+            }
+        }
+        class FSM_Root extends NodeComponent {
+            constructor(id, x, y, container, manager, name = 'FSM ROOT', initial = 'InitialState') {
+                super(id, x, y, container, manager, 'fsm_root', 180, 70, name);
+                this.data = {
+                    initialStateName: initial
+                };
+                this.outputs[0].s_type = 'FSM_INITIAL';
+                this.outputs[0].element.className = 'port port-output port-fsm_initial';
+            }
+        }
+        class FSM_State extends NodeComponent {
+            constructor(id, x, y, container, manager, name = 'Etat_1') {
+                super(id, x, y, container, manager, 'fsm_state', 180, 100, name);
+                this.data = {
+                    stateName: name
+                };
+                this.inputs[0].s_type = 'FSM_TRANSITION_IN';
+                this.inputs[0].element.className = 'port port-input port-fsm_transition_in';
+                this.outputs[0].s_type = 'FSM_TRANSITION_RULE_OUT';
+                this.outputs[0].element.className = 'port port-output port-fsm_transition_out';
+            }
+        }
+        class FSM_Transition extends NodeComponent {
+            constructor(id, x, y, container, manager, name = 'CLICK') {
+                super(id, x, y, container, manager, 'fsm_transition', 150, 70, name);
+                this.data = {
+                    eventName: name
+                };
+                this.inputs[0].s_type = 'FSM_TRANSITION_RULE_IN';
+                this.inputs[0].element.className = 'port port-input port-fsm_initial';
+                this.outputs[0].s_type = 'FSM_TARGET_STATE_OUT';
+                this.outputs[0].element.className = 'port port-output port-fsm_transition_out';
+            }
+        }
+        class GraphManager {
+            constructor(ide, svg) {
+                this.ideContainer = ide;
+                this.svgContainer = svg;
+                this.nodes = [];
+                this.links = [];
+                this.linkIdCounter = 0;
+                this.nodeIdCounter = 0;
+            }
+            isIntersecting(a, b) {
+                return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+            }
+            getNodeById(id) {
+                return this.nodes.find(n => n.id === id);
+            }
+            getNodeByName(name) {
+                for (let i = 0; i < this.nodes.length; i++) {
+                    const n = this.nodes[i];
+                    if (n && n.name === name) return n;
+                }
+                return null;
+            }
+
+            getLinkById(id) {
+                return this.links.find(l => l.id === id);
+            }
+            linkExists(sId, sPortId, tId, tPortId) {
+                return this.links.some(l => (l.source.nodeId === sId && l.source.port.id === sPortId && l.target.nodeId === tId && l.target.port.id === tPortId) || (l.source.nodeId === tId && l.source.port.id === tPortId && l.target.nodeId === sId && l.target.port.id === sPortId));
+            }
+            updateLinksForNode(nodeId) {
+                this.links.forEach(l => {
+                    if (l.source.nodeId === nodeId || l.target.nodeId === nodeId) {
+                        const a = this.getNodeById(l.source.nodeId),
+                            b = this.getNodeById(l.target.nodeId);
+                        if (a && b) {
+                            l.updatePath(a.getPortWorldPosition(l.source.port), b.getPortWorldPosition(l.target.port));
+                        }
+                    }
+                });
+            }
+
+            animateLinkCreation(link, sourceElement, targetElement) {
+                if (sourceElement) sourceElement.classList.add('port-highlight');
+                if (targetElement) targetElement.classList.add('port-highlight');
+                link.svg.setAttribute('stroke-width', '5');
+                link.svg.setAttribute('stroke', '#FFD700');
+                setTimeout(() => {
+                    if (sourceElement) sourceElement.classList.remove('port-highlight');
+                    if (targetElement) targetElement.classList.remove('port-highlight');
+                    link.svg.setAttribute('stroke-width', '3');
+                    link.svg.setAttribute('stroke', '#333');
+                }, 150);
+            }
+            _createLinkByPorts(sId, sPort, tId, tPort) {
+                if (!sId || !sPort || !tId || !tPort) return null;
+                const id = 'l' + (++this.linkIdCounter);
+                const link = new Link(id, {
+                    nodeId: sId,
+                    port: sPort
+                }, {
+                    nodeId: tId,
+                    port: tPort
+                }, this.svgContainer, this);
+                this.links.push(link);
+                this.updateLinksForNode(sId);
+                this.updateLinksForNode(tId);
+                this.animateLinkCreation(link, sPort.element, tPort.element);
+                return link;
+            }
+
+
+            createLink(sourceName, targetName) {
+                const sNode = this.getNodeByName(sourceName);
+                const tNode = this.getNodeByName(targetName);
+                if (!sNode || !tNode) return null;
+                const sPort = sNode.outputs[0];
+                const tPort = tNode.inputs[0];
+                if (!sPort || !tPort) return null;
+                if (this.linkExists(sNode.id, sPort.id, tNode.id, tPort.id)) return null;
+                return this._createLinkByPorts(sNode.id, sPort, tNode.id, tPort);
+            }
+            createNode(x, y, type = 'html', name = null) {
+                const id = 'n' + (++this.nodeIdCounter);
+                let n;
+                switch (type) {
+                    case 'fsm_root':
+                        n = new FSM_Root(id, x, y, this.ideContainer, this, name);
+                        break;
+                    case 'fsm_state':
+                        n = new FSM_State(id, x, y, this.ideContainer, this, name);
+                        break;
+                    case 'fsm_transition':
+                        n = new FSM_Transition(id, x, y, this.ideContainer, this, name);
+                        break;
+                    default:
+                        n = new NodeComponent(id, x, y, this.ideContainer, this, type, 150, 70, name);
+                }
+                this.nodes.push(n);
+                return n;
+            }
+            removeLink(id) {
+                const l = this.getLinkById(id);
+                if (l) {
+                    this.links = this.links.filter(x => x.id !== id);
+                    l.remove();
+                    this.updateLinksForNode(l.source.nodeId);
+                    this.updateLinksForNode(l.target.nodeId);
+                }
+            }
+            notifyNodeMoved(id) {
+                this.updateLinksForNode(id);
+            }
+            checkNewConnectionsByContact(movedId) {
+                const moved = this.getNodeById(movedId);
+                const inP = moved.inputs[0],
+                    outP = moved.outputs[0];
+                this.checkPort(movedId, outP, 'input');
+                this.checkPort(movedId, inP, 'output');
+            }
+            checkPort(movedId, movedPort, targetType) {
+                const movedRect = movedPort.element.getBoundingClientRect();
+                for (const target of this.nodes) {
+                    const list = targetType === 'input' ? target.inputs : target.outputs;
+                    const tp = list[0];
+                    if (!tp) continue;
+                    const tRect = tp.element.getBoundingClientRect();
+                    if (this.isIntersecting(movedRect, tRect)) {
+                        let sId, sPort, tId, tPort;
+                        if (movedPort.type === 'output') {
+                            sId = movedId;
+                            sPort = movedPort;
+                            tId = target.id;
+                            tPort = tp;
+                        } else {
+                            sId = target.id;
+                            sPort = tp;
+                            tId = movedId;
+                            tPort = movedPort;
+                        }
+                        if (!this.linkExists(sId, sPort.id, tId, tPort.id)) this._createLinkByPorts(sId, sPort, tId, tPort);
+                    }
+                }
+            }
+            compileFSM() {
+                const fsm = {
+                    id: 'app',
+                    initial: null,
+                    states: {},
+                    actions: {}
+                };
+                const root = this.nodes.find(n => n.type === 'fsm_root');
+                if (!root) return fsm;
+                const init = this.links.find(l => l.source.nodeId === root.id && l.source.port.s_type === 'FSM_INITIAL');
+                if (!init) return fsm;
+                const initialState = this.getNodeById(init.target.nodeId);
+                fsm.initial = (initialState && initialState.data && initialState.data.stateName) ? initialState.data.stateName : '';
+                const queue = [initialState];
+                const seen = new Set();
+                while (queue.length) {
+                    const stateNode = queue.shift();
+                    if (!stateNode || seen.has(stateNode.id)) continue;
+                    seen.add(stateNode.id);
+                    const stateName = (stateNode.data && stateNode.data.stateName) ? stateNode.data.stateName : stateNode.id;
+                    fsm.states[stateName] = {
+                        on: {}
+                    };
+                    const rules = this.links.filter(l => l.source.nodeId === stateNode.id && l.source.port.s_type === 'FSM_TRANSITION_RULE_OUT');
+                    for (const rl of rules) {
+                        const tNode = this.getNodeById(rl.target.nodeId);
+                        if (!tNode || tNode.type !== 'fsm_transition') continue;
+                        const eventName = (tNode.data && tNode.data.eventName) ? tNode.data.eventName : 'EVT';
+                        const targetLink = this.links.find(l => l.source.nodeId === tNode.id && l.source.port.s_type === 'FSM_TARGET_STATE_OUT');
+                        if (!targetLink) continue;
+                        const targetState = this.getNodeById(targetLink.target.nodeId);
+                        const targetName = (targetState && targetState.data && targetState.data.stateName) ? targetState.data.stateName : ((targetState && targetState.id) ? targetState.id : '');
+                        fsm.states[stateName].on[eventName] = {
+                            target: targetName,
+                            actions: []
+                        };
+                        if (targetState && !seen.has(targetState.id)) queue.push(targetState);
+                    }
+                }
+                return fsm;
+            }
+            displayFSM() {
+                document.getElementById('fsm-output').innerText = JSON.stringify(this.compileFSM(), null, 2);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const ide = document.getElementById('ide-container'),
+                svg = document.getElementById('link-canvas');
+            const gm = new GraphManager(ide, svg);
+            window.graphManager = gm;
+            const root = gm.createNode(50, 350, 'fsm_root', "FSM ROOT");
+            const a = gm.createNode(300, 450, 'fsm_state', 'State A');
+            const t = gm.createNode(500, 550, 'fsm_transition', 'CLICK');
+            const b = gm.createNode(750, 650, 'fsm_state', 'State B');
+            gm.createLink('FSM ROOT', 'State A');
+            gm.createLink('State A', 'CLICK');
+            gm.createLink('CLICK', 'State B');
+            document.getElementById('btn-compile').addEventListener('click', () => gm.displayFSM());
+        });
+    </script>
+</body>
+
+</html>

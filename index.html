@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phi.L'Art de la Lame - Couteaux Artisanaux</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Oswald:wght@500;700&display=swap');
+
+        :root {
+            --color-bg-dark: #121212;
+            --color-bg-medium: #1f1f1f;
+            --color-bg-light: #2a2a2a;
+            --color-text-primary: #e0e0e0;
+            --color-text-secondary: #a0a0a0;
+            --color-accent: #d35400;
+            --color-accent-hover: #e67e22;
+            --font-heading: 'Oswald', sans-serif;
+            --font-body: 'Roboto Condensed', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 70px;
+            /* Adjust for fixed header */
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-primary);
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-accent);
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        /* Header & Navigation */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            transition: background 0.3s ease;
+        }
+
+        .main-header.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo-img {
+            height: 100px;
+            width: auto;
+            display: block;
+            margin-right: 15px;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo .accent {
+            color: var(--color-accent);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--color-accent);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 2rem;
+            color: var(--color-text-primary);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0;
+            color: #fff;
+            background: url('medias/suminagashi_quad.gif') center/cover no-repeat;
+        }
+
+        #bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .hero-content {
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            font-family: var(--font-body);
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--color-accent);
+            color: #fff;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            border: 2px solid var(--color-accent);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--color-accent);
+        }
+
+        /* Knives Section */
+        #knives {
+            background-color: var(--color-bg-medium);
+        }
+
+        .slider-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 2px solid var(--color-bg-light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--color-bg-dark);
+        }
+
+        .knife-image {
+            flex: 0 0 50%;
+        }
+
+        .knife-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .knife-info {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .knife-info h3 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--color-accent);
+        }
+
+        .knife-info p {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .knife-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 25px;
+            font-family: var(--font-heading);
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .slider-btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s ease;
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        .slider-btn#prev-btn {
+            margin-left: -1px;
+        }
+
+        .slider-btn#next-btn {
+            margin-right: -1px;
+        }
+
+        .slider-btn:hover {
+            background: var(--color-accent);
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-image {
+            flex: 0 0 40%;
+            max-width: 40%;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border: 3px solid var(--color-bg-light);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Media sections (GIFs) */
+        .media-section {
+            background-color: var(--color-bg-medium);
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .media-card {
+            background: var(--color-bg-dark);
+            border: 2px solid var(--color-bg-light);
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .media-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+
+        /* Diaporama single view */
+        .diaporama-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .diaporama-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Process section */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .process-item {
+            background: var(--color-bg-dark);
+            border: 2px solid var(--color-bg-light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .process-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .process-item h3 {
+            color: var(--color-accent);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .process-item p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Materials section */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .material-card {
+            background: var(--color-bg-dark);
+            border: 2px solid var(--color-bg-light);
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .material-card h3 {
+            color: var(--color-accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .material-card h3::before {
+            content: "▸";
+            color: var(--color-accent);
+        }
+
+        .material-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .material-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-bg-light);
+        }
+
+        .material-card li:last-child {
+            border-bottom: none;
+        }
+
+        .material-card p {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-text-secondary);
+        }
+
+        /* Instagram section */
+        .instagram-section {
+            background-color: var(--color-bg-medium);
+            text-align: center;
+        }
+
+        .instagram-embed {
+            max-width: 400px;
+            width: 400px;
+            height: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background: var(--color-bg-dark);
+            border: 2px solid var(--color-bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .instagram-embed iframe {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .instagram-cta {
+            margin-top: 30px;
+        }
+
+        .instagram-cta a {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .instagram-cta a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(188, 24, 136, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: var(--color-bg-dark);
+            border: 2px solid var(--color-accent);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            animation: slideDown 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--color-accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--color-accent);
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            color: var(--color-text-secondary);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--color-text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 12px 15px;
+            background: var(--color-bg-medium);
+            border: 1px solid var(--color-bg-light);
+            border-radius: 6px;
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            background: var(--color-bg-dark);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: var(--color-accent);
+            color: var(--color-bg-dark);
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn-cancel {
+            background: var(--color-bg-light);
+            color: var(--color-text-secondary);
+        }
+
+        .btn-cancel:hover {
+            background: var(--color-bg-medium);
+            color: var(--color-text-primary);
+        }
+
+        .media-caption {
+            margin-top: 8px;
+            color: var(--color-text-secondary);
+            font-size: .95rem;
+        }
+
+        /* About logo */
+        .about-logo {
+            max-width: 120px;
+            margin: 0 0 15px 0;
+            opacity: 0.9;
+            display: inline-block;
+        }
+
+        /* Contact Section */
+        #contact {
+            background-color: var(--color-bg-medium);
+            text-align: center;
+        }
+
+        .contact-content p {
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .contact-item a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--color-accent-hover);
+        }
+
+        /* Google Maps */
+        .contact-map {
+            margin-top: 50px;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-map iframe {
+            width: 100%;
+            height: 450px;
+            border: 2px solid var(--color-bg-light);
+            border-radius: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-bg-dark);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--color-bg-light);
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about-image {
+                max-width: 60%;
+                margin-bottom: 30px;
+            }
+
+            .slide {
+                flex-direction: column;
+            }
+
+            .knife-image,
+            .knife-info {
+                flex-basis: 100%;
+            }
+
+            .knife-info {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                /* Header height */
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--color-bg-dark);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.4s ease-in-out;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 20px 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .contact-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .knife-info {
+                padding: 25px;
+            }
+
+            .knife-info h3 {
+                font-size: 1.8rem;
+            }
+
+            .knife-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header" id="main-header">
+        <nav class="nav-bar container">
+            <a href="#hero" class="logo">
+                <img src="medias/phil.jpg" alt="Logo Phil" class="header-logo-img">
+                <span>L'Art de la <span class="accent">Lame</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#hero" class="nav-link">Accueil</a></li>
+                <li><a href="#knives" class="nav-link">Couteaux</a></li>
+                <li><a href="#process" class="nav-link">Fabrication</a></li>
+                <li><a href="#materials" class="nav-link">Matériaux</a></li>
+                <li><a href="#about" class="nav-link">L'Artisan</a></li>
+                <li><a href="#instagram" class="nav-link">Instagram</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content container">
+            <h1>Des Lames d'Exception</h1>
+            <p>Forger son caractère, trancher la perfection.</p>
+            <a href="#knives" class="cta-button">Découvrir les créations</a>
+        </div>
+    </section>
+
+    <main>
+        <section id="knives">
+            <div class="container">
+                <h2>Nos Créations Uniques</h2>
+                <div class="slider-container">
+                    <div class="slider" id="slider">
+                        <!-- Couteau 1 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_01.JPG" alt="Couteau artisanal 'Le Trappeur'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Trappeur</h3>
+                                <p>Un couteau robuste et fiable, compagnon idéal pour l'aventure. Lame en acier carbone XC75 et manche en bois de noyer stabilisé. Finition brute de forge.</p>
+                                <div class="knife-price">180 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 2 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_02.JPG" alt="Couteau artisanal 'L'Urbain'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>L'Urbain</h3>
+                                <p>Élégant et discret, ce couteau pliant allie modernité et tradition. Lame en acier inoxydable 14C28N et manche en fibre de carbone. Mécanisme liner-lock.</p>
+                                <div class="knife-price">250 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 3 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_03.JPG" alt="Couteau de cuisine 'Le Chef'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Chef</h3>
+                                <p>Un couteau de cuisine d'exception pour les passionnés de gastronomie. Lame de 20cm en acier damas et manche ergonomique en bois d'olivier. Tranchant redoutable.</p>
+                                <div class="knife-price">350 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 4 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_04.JPG" alt="Couteau artisanal 'Le Trappeur'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Trappeur</h3>
+                                <p>Un couteau robuste et fiable, compagnon idéal pour l'aventure. Lame en acier carbone XC75 et manche en bois de noyer stabilisé. Finition brute de forge.</p>
+                                <div class="knife-price">180 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 5 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_05.JPG" alt="Couteau pliant 'Le Voyageur'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Voyageur</h3>
+                                <p>Petit pliant conçu pour l'usage quotidien : léger, fiable et discret. Lame en VG-10, manche en micarta brun, pivot à roulement céramique.</p>
+                                <div class="knife-price">120 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 6 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_06.JPG" alt="Couteau de chasse 'L'Alpiniste'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>L'Alpiniste</h3>
+                                <p>Conçu pour la randonnée et la chasse légère : ergonomie optimisée et robustesse. Lame en acier 52100, manche en bois de cerisier traité et garde renforcée.</p>
+                                <div class="knife-price">420 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 7 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_07.JPG" alt="Couteau utilitaire 'Le Camp'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Camp</h3>
+                                <p>Couteau utilitaire polyvalent pour le bivouac et le travail en extérieur. Lame en acier 1095, manche enveloppant en cuir cousu main, finition satinée.</p>
+                                <div class="knife-price">95 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 8 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_08.JPG" alt="Couteau de chef 'Santoku Atelier'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Santoku Atelier</h3>
+                                <p>Santoku de précision pour chefs exigeants : équilibre parfait et rétention de tranchant. Lame San Mai, manche ergonomique en palissandre, lame damassée extérieure.</p>
+                                <div class="knife-price">320 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 9 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_09.JPG" alt="Couteau pliant 'Le Titan'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Titan</h3>
+                                <p>Pliant haut de gamme alliant légèreté et solidité. Lame en CPM S30V, manche en titane brossé, clip réversible et verrou frame-lock.</p>
+                                <div class="knife-price">480 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 10 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_10.JPG" alt="Couteau 'Le Forgeron'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Forgeron</h3>
+                                <p>Inspiré des lames traditionnelles, finition martelée et caractère brut. Lame en acier XC100, manche en ébène poli, émouture creuse pour un tranchant durable.</p>
+
+                                <div class="knife-price">220 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 11 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_11.JPG" alt="Couteau 'Le Minimal'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Minimal</h3>
+                                <p>Design épuré pour l'usage urbain : lignes simples et efficacité. Lame en acier N690, manche en G10 texturé, système de déploiement flipper.</p>
+                                <div class="knife-price">175 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 12 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_12.JPG" alt="Couteau de collection 'L'Héritage'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>L'Héritage</h3>
+                                <p>Pièce de collection finement ouvragée, décor gravé et matériaux nobles. Lame en acier ZDP-189, mitres en acier poli et plaquettes en ivoire stabilisé.</p>
+                                <div class="knife-price">650 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 13 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_13.JPG" alt="Couteau 'Le Marin'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Marin</h3>
+                                <p>Conçu pour la mer : résistance à la corrosion et prise en main sûre. Lame en acier inoxydable Bohler N690, soie pleine, manche en bois stabilisé et insert antidérapant.</p>
+                                <div class="knife-price">140 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 14 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_14.JPG" alt="Couteau 'Le Tanto'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>Le Tanto</h3>
+                                <p>Forme tanto pour une pénétration accrue et un style martial. Lame en RWL-34, manche en aluminium anodisé, finition stonewash et contre-tranchant renforcé.</p>
+                                <div class="knife-price">260 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 15 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_15.JPG" alt="Couteau 'L'Œuvre'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>L'Œuvre</h3>
+                                <p>Création d'atelier, équilibre parfait entre esthétisme et fonctionnalité. Lame damassée sur noyau RWL-34, manche en corne stabilisée et rivets décoratifs laiton.</p>
+                                <div class="knife-price">520 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                        <!-- Couteau 16 -->
+                        <div class="slide">
+                            <div class="knife-image">
+                                <img src="medias/Capture_10_b.JPG" alt="Couteau 'Le Trappeur'">
+                            </div>
+                            <div class="knife-info">
+                                <h3>La Gazelle</h3>
+                                <p>Plus décoratif qu'utilitaire, corne de springbox et acier 14c28n intercalaires cuivre et g10 blanc. 35 cm</p>
+                                <div class="knife-price">280 €</div>
+                                <button class="cta-button buy-btn">Acheter</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-nav">
+                        <button class="slider-btn" id="prev-btn">&lt;</button>
+                        <button class="slider-btn" id="next-btn">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process">
+            <div class="container">
+                <h2>Processus de Fabrication</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                    Chaque couteau est le résultat d'un processus artisanal minutieux, alliant techniques ancestrales et savoir-faire moderne.
+                </p>
+                <div class="process-grid">
+                    <div class="process-item">
+                        <img src="medias/trempé.gif" alt="Trempe de la lame">
+                        <h3>Trempe de la Lame</h3>
+                        <p>La trempe est une étape cruciale qui confère à l'acier sa dureté et sa résistance. La lame est chauffée à haute température puis refroidie rapidement dans l'huile ou l'eau.</p>
+                    </div>
+                    <div class="process-item">
+                        <img src="medias/suminagashi.gif" alt="Motif Suminagashi">
+                        <h3>Motif Suminagashi</h3>
+                        <p>Technique japonaise ancestrale créant des motifs uniques sur l'acier. Chaque lame devient une œuvre d'art avec des ondulations caractéristiques.</p>
+                    </div>
+                    <div class="process-item">
+                        <img src="medias/mode_d_emploi.gif" alt="Assemblage du mécanisme">
+                        <h3>Assemblage du Mécanisme</h3>
+                        <p>Pour les couteaux pliants, l'assemblage du mécanisme demande précision et expertise. Chaque pièce est ajustée pour garantir un fonctionnement fluide et sûr.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="materials">
+            <div class="container">
+                <h2>Matériaux d'Exception</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                    Je sélectionne rigoureusement chaque matériau pour garantir qualité, durabilité et esthétique.
+                </p>
+                <div class="materials-grid">
+                    <div class="material-card">
+                        <h3>Aciers pour Lames</h3>
+                        <ul>
+                            <li><strong>Acier Carbone XC75</strong> - Excellent tranchant, facile à affûter, patine naturelle</li>
+                            <li><strong>Acier Inoxydable 14C28N</strong> - Résistant à la corrosion, dureté optimale</li>
+                            <li><strong>VG-10</strong> - Acier japonais haut de gamme, très tranchant</li>
+                            <li><strong>Acier Damas</strong> - Superposition de couches, motifs uniques, performance exceptionnelle</li>
+                        </ul>
+                        <p>Chaque acier est choisi en fonction de l'usage prévu du couteau et des préférences esthétiques.</p>
+                    </div>
+                    <div class="material-card">
+                        <h3>Bois Précieux</h3>
+                        <ul>
+                            <li><strong>Noyer Stabilisé</strong> - Robuste, résistant à l'humidité, grain élégant</li>
+                            <li><strong>Olivier</strong> - Bois méditerranéen dense, veinage unique</li>
+                            <li><strong>Buis</strong> - Bois dur et fin, excellent pour les détails</li>
+                            <li><strong>Cade</strong> - Bois aromatique local, résistant et durable</li>
+                        </ul>
+                        <p>Les bois sont stabilisés pour garantir leur durabilité et résistance aux variations d'humidité.</p>
+                    </div>
+                    <div class="material-card">
+                        <h3>Matériaux Modernes</h3>
+                        <ul>
+                            <li><strong>Fibre de Carbone</strong> - Ultra-léger, résistant, aspect moderne</li>
+                            <li><strong>Micarta</strong> - Composite résine-tissu, très résistant, excellente prise en main</li>
+                            <li><strong>G10</strong> - Matériau composite haute performance, imperméable</li>
+                            <li><strong>Titane</strong> - Pour les pièces mécaniques, léger et anticorrosion</li>
+                        </ul>
+                        <p>Ces matériaux offrent des performances exceptionnelles pour un usage intensif.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="methods" class="media-section">
+            <div class="container">
+                <h2>Méthodes et Savoir-Faire</h2>
+                <div class="media-grid">
+                    <figure class="media-card">
+                        <img src="medias/suite.gif" alt="Diaporama modèles">
+                        <figcaption class="media-caption">Quelques créations</figcaption>
+                    </figure>
+                    <figure class="media-card">
+                        <img src="medias/patron.JPG" alt="Patron">
+                        <figcaption class="media-caption">Patron avant découpe</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section id="diaporama" class="media-section">
+            <div class="container">
+                <h2>Diaporama</h2>
+                <div class="diaporama-wrapper">
+                    <img src="medias/diaporama.gif" alt="Diaporama grand format">
+                </div>
+            </div>
+        </section>
+
+
+        <section id="objets" class="media-section">
+            <div class="container">
+                <h2>Objets en Images</h2>
+                <div class="media-grid">
+                    <figure class="media-card">
+                        <img src="medias/suite.gif" alt="Sequence d'objets fabriques">
+                        <figcaption class="media-caption">Sequence</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>L'Homme derrière la Lame</h2>
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="medias/etau_de_coutellerie.JPG" alt="Outil de l'artisan forgeron">
+                    </div>
+                    <div class="about-text">
+                        <img src="medias/phil.jpg" alt="Logo Phil" class="about-logo">
+
+                        <h3>Passion, Feu et Acier</h3>
+                        <p>Artisan coutelier autodidacte, je transforme la matière brute en instruments de précision. Chaque couteau qui sort de mon atelier est le fruit d'heures de travail acharné, où le feu, le marteau et la main de l'homme s'unissent.</p>
+                        <p>Ma philosophie est simple : créer des couteaux qui ne sont pas seulement beaux, mais aussi fonctionnels et durables. Des outils qui vous accompagneront pendant des années, que ce soit dans votre cuisine, vos aventures en plein air ou simplement dans votre poche au quotidien.</p>
+                        <p>Je sélectionne personnellement chaque matériau, de l'acier de la lame aux essences de bois précieuses ou aux matériaux composites modernes pour les manches. Chaque pièce est unique, forgée avec caractère et âme.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="instagram" class="instagram-section">
+            <div class="container">
+                <h2>Suivez-moi sur Instagram</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 20px; color: var(--color-text-secondary);">
+                    Découvrez mes dernières créations, le quotidien de l'atelier et les coulisses de la fabrication.
+                </p>
+                <div class="instagram-embed">
+                    <!-- Instagram embed code -->
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/couteauxphi.l/" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:360px; min-width:360px; padding:0; width:360px; height:360px;">
+                        <div style="padding:16px;">
+                            <a href="https://www.instagram.com/couteauxphi.l/" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank" rel="noopener">
+                                <div style="display: flex; flex-direction: row; align-items: center;">
+                                    <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                    <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                        <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                        <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                    </div>
+                                </div>
+                                <div style="padding: 19% 0;"></div>
+                                <div style="display:block; height:50px; margin:0 auto 12px; width:50px;">
+                                    <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                                                <g>
+                                                    <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div style="padding-top: 8px;">
+                                    <div style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Voir cette publication sur Instagram</div>
+                                </div>
+                            </a>
+                        </div>
+                    </blockquote>
+                    <script async src="//www.instagram.com/embed.js"></script>
+                </div>
+                <div class="instagram-cta">
+                    <a href="https://www.instagram.com/couteauxphi.l/" target="_blank" rel="noopener">
+                        Suivre @couteauxphi.l sur Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Entrons en contact</h2>
+                <div class="contact-content">
+                    <p>Pour toute commande sur-mesure, question ou simplement pour discuter de ma passion, n'hésitez pas à me contacter. Je serai ravi d'échanger avec vous.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            Email: <a href="mailto:contact@artdelalame.fr">contact@artdelalame.fr</a>
+                        </div>
+                        <div class="contact-item">
+                            Téléphone: <a href="tel:+33612345678">06 12 34 56 78</a>
+                        </div>
+                        <div class="contact-item">
+                            Instagram: <a href="https://www.instagram.com/couteauxphi.l/" target="_blank" rel="noopener">@couteauxphi.l</a>
+                        </div>
+                    </div>
+                    <div class="contact-map">
+                        <iframe title="Localisation Saint-Just, Hérault" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d92646.89384707384!2d3.6847!3d43.7847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b42d5e5e5e5e5e%3A0x5e5e5e5e5e5e5e5e!2s34400%20Saint-Just%2C%20France!5e0!3m2!1sfr!2sfr!4v1234567890123!5m2!1sfr!2sfr" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 L'Art de la Lame. Phil - Tous droits réservés. Site web créé avec passion.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de contact -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="closeModal">&times;</button>
+            <h2>Demande de renseignements</h2>
+            <p>Remplissez ce formulaire pour me contacter au sujet de ce couteau.</p>
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="userName">Votre nom *</label>
+                    <input type="text" id="userName" name="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Votre email *</label>
+                    <input type="email" id="userEmail" name="userEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">Téléphone (optionnel)</label>
+                    <input type="tel" id="userPhone" name="userPhone">
+                </div>
+                <div class="form-group">
+                    <label for="knifeModel">Modèle de couteau</label>
+                    <input type="text" id="knifeModel" name="knifeModel" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="requestType">Type de demande *</label>
+                    <select id="requestType" name="requestType" required>
+                        <option value="">-- Sélectionnez --</option>
+                        <option value="achat">Achat d'un modèle existant</option>
+                        <option value="surmesure">Commande sur-mesure</option>
+                        <option value="info">Demande d'informations</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userMessage">Votre message *</label>
+                    <textarea id="userMessage" name="userMessage" required placeholder="Décrivez votre demande..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Annuler</button>
+                    <button type="submit" class="btn-submit">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // --- Mobile Navigation ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+            // Close menu when a link is clicked
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                    }
+                });
+            });
+
+
+            // --- Active Nav Link on Scroll ---
+            const sections = document.querySelectorAll('section');
+            const navLi = document.querySelectorAll('.nav-links li a');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLi.forEach(a => {
+                    a.classList.remove('active');
+                    if (a.getAttribute('href') == '#' + current) {
+                        a.classList.add('active');
+                    }
+                })
+            });
+
+
+            // --- Slider Logic ---
+            const slider = document.getElementById('slider');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                if (index >= totalSlides) {
+                    currentIndex = 0;
+                } else if (index < 0) {
+                    currentIndex = totalSlides - 1;
+                } else {
+                    currentIndex = index;
+                }
+                const offset = -currentIndex * 100;
+                slider.style.transform = `translateX(${offset}%)`;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentIndex + 1);
+            });
+
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentIndex - 1);
+            });
+
+            // Auto-play slider (optional)
+            setInterval(() => {
+                 showSlide(currentIndex + 1);
+            }, 7000);
+
+            // --- Modal Contact ---
+            const modal = document.getElementById('contactModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const contactForm = document.getElementById('contactForm');
+            const knifeModelInput = document.getElementById('knifeModel');
+            const buyButtons = document.querySelectorAll('.buy-btn');
+
+            // Ouvrir la modale quand on clique sur "Acheter"
+            buyButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Récupérer le nom du couteau depuis le parent
+                    const knifeCard = e.target.closest('.knife-slide');
+                    const knifeName = knifeCard ? knifeCard.querySelector('h3').textContent : 'Couteau';
+
+                    // Pré-remplir le modèle dans le formulaire
+                    knifeModelInput.value = knifeName;
+
+                    // Ouvrir la modale
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Empêcher le scroll
+                });
+            });
+
+            // Fermer la modale avec le bouton X
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Réactiver le scroll
+            });
+
+            // Fermer la modale avec le bouton Annuler
+            cancelBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            // Fermer la modale en cliquant sur le fond
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Gérer la soumission du formulaire
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Récupérer les données du formulaire
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData);
+
+                // Créer le corps de l'email
+                const subject = encodeURIComponent(`Demande concernant: ${data.knifeModel}`);
+                const body = encodeURIComponent(
+                    `Nom: ${data.userName}\n` +
+                    `Email: ${data.userEmail}\n` +
+                    `Téléphone: ${data.userPhone || 'Non renseigné'}\n` +
+                    `Modèle: ${data.knifeModel}\n` +
+                    `Type de demande: ${data.requestType}\n\n` +
+                    `Message:\n${data.userMessage}`
+                );
+
+                // Ouvrir le client email par défaut
+                window.location.href = `mailto:contact@artdelalame.fr?subject=${subject}&body=${body}`;
+
+                // Fermer la modale et réinitialiser le formulaire
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    contactForm.reset();
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
