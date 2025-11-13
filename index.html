@@ -425,7 +425,8 @@
             text-align: center;
         }
 
-        .process-item img {
+        .process-item img,
+        .process-item video {
             width: 100%;
             height: auto;
             border-radius: 4px;
@@ -1137,7 +1138,10 @@
                         <p>Technique japonaise ancestrale créant des motifs uniques sur l'acier. Chaque lame devient une œuvre d'art avec des ondulations caractéristiques.</p>
                     </div>
                     <div class="process-item">
-                        <img src="medias/mode_d_emploi.gif" alt="Assemblage du mécanisme">
+                        <video autoplay loop muted playsinline>
+                            <source src="medias/mode_d_emploi.mp4" type="video/mp4">
+                            Votre navigateur ne supporte pas la vidéo.
+                        </video>
                         <h3>Assemblage du Mécanisme</h3>
                         <p>Pour les couteaux pliants, l'assemblage du mécanisme demande précision et expertise. Chaque pièce est ajustée pour garantir un fonctionnement fluide et sûr.</p>
                     </div>
@@ -1445,7 +1449,7 @@
 
             // Auto-play slider (optional)
             setInterval(() => {
-                 showSlide(currentIndex + 1);
+                showSlide(currentIndex + 1);
             }, 7000);
 
             // --- Modal Contact ---
