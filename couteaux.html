@@ -813,10 +813,30 @@
             .knife-image,
             .knife-info {
                 flex-basis: 100%;
+                flex: none;
+            }
+
+            .knife-image {
+                width: 100%;
             }
 
             .knife-info {
                 text-align: center;
+                width: 100%;
+                display: block;
+                padding: 30px 20px;
+            }
+
+            .knife-info h3 {
+                font-size: 1.8rem;
+            }
+
+            .knife-info p {
+                font-size: 0.95rem;
+            }
+
+            .knife-price {
+                font-size: 1.6rem;
             }
         }
 
@@ -969,16 +989,31 @@
                 font-size: 1rem;
             }
 
+            /* Slider mobile très petit écran */
             .knife-info {
-                padding: 20px 15px;
+                padding: 20px 15px !important;
+                display: block !important;
+                width: 100% !important;
             }
 
             .knife-info h3 {
-                font-size: 1.5rem;
+                font-size: 1.5rem !important;
+                margin-bottom: 10px;
+            }
+
+            .knife-info p {
+                font-size: 0.9rem !important;
+                margin-bottom: 15px;
             }
 
             .knife-price {
-                font-size: 1.3rem;
+                font-size: 1.3rem !important;
+                margin-bottom: 15px;
+            }
+
+            .buy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
 
             /* Logo encore plus petit */
