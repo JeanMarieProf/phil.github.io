@@ -19,3 +19,11 @@ index_fsm.html
 
 # Fichiers de travail
 couteaux_dialogue.txt
+
+# Système de génération (gardé localement)
+node_modules/
+package-lock.json
+data/
+templates/
+build.js
+package.json
